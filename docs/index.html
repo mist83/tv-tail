@@ -7,9 +7,9 @@
     <title>tv-tail · live console for any browser app</title>
     <meta name="description" content="Hosted dashboard for tv-tail — live console + error stream from every browser app you've wired up. Filter by app, level, search.">
     <link rel="icon" type="image/svg+xml" href="./favicon.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <!-- Canonical UI framework — drives palette, typography, scrollbars, button/input chrome. -->
+    <link rel="stylesheet" href="https://ui.mullmania.com/ghoul/style.css">
+    <!-- App-specific layout (three-pane dashboard grid + log-feed rows) on top. -->
     <link rel="stylesheet" href="./styles.css">
     <!-- We dogfood our own log-tap so the dashboard appears in itself. -->
     <script>window.LOG_TAP_VERSION = "dashboard";</script>
@@ -17,7 +17,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js" defer></script>
     <script type="module" src="./app.js" defer></script>
   </head>
-  <body>
+  <body data-ui-theme="ghoul" data-ui-mode="dark">
     <header class="topbar">
       <div class="brand">
         <span class="brand-mark">tv·</span><span class="brand-rest">tail</span>
