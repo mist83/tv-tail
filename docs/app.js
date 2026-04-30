@@ -130,6 +130,11 @@ async function reconnect() {
     .build();
 
   conn.on("customMessage", onCustom);
+  // Silence "no handler for systemNotification" warnings the SignalR runtime emits
+  // when a join/leave event arrives — we don't surface those in the dashboard.
+  conn.on("systemNotification", () => { /* intentional no-op */ });
+  conn.on("channelChat", () => { /* intentional no-op — log-tap uses customMessage */ });
+  conn.on("channelAnnouncement", () => { /* intentional no-op */ });
   conn.onreconnected(() => setConnState("connected"));
   conn.onreconnecting(() => setConnState("reconnecting"));
   conn.onclose(() => setConnState("offline"));

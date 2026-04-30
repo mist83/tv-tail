@@ -107,6 +107,17 @@
     return conn.invoke("SendCustomMessage", CHANNEL, topic, msg);
   }
 
+  function safeNav() {
+    try { return navigator || {}; } catch (e) { return {}; }
+  }
+  function safeScreen() {
+    try { return { w: screen && screen.width || 0, h: screen && screen.height || 0, dpr: (window.devicePixelRatio || 1) }; }
+    catch (e) { return { w: 0, h: 0, dpr: 1 }; }
+  }
+  function safeOnline() {
+    try { return safeNav().onLine !== false; } catch (e) { return true; }
+  }
+
   function announceHello() {
     if (helloSent || !ready) return;
     helloSent = true;
@@ -114,11 +125,11 @@
       appId: APP_ID,
       sessionId: SESSION,
       version: VERSION,
-      url: location.href,
-      referrer: document.referrer || "",
-      ua: (navigator.userAgent || "").slice(0, 220),
-      screen: { w: screen && screen.width, h: screen && screen.height, dpr: window.devicePixelRatio },
-      online: navigator.onLine,
+      url: (location && location.href) || "",
+      referrer: (document && document.referrer) || "",
+      ua: (safeNav().userAgent || "").slice(0, 220),
+      screen: safeScreen(),
+      online: safeOnline(),
     }).catch(function () { helloSent = false; /* retry next cycle */ });
   }
 
@@ -183,7 +194,9 @@
   });
   window.addEventListener("beforeunload", function () { flush(); });
   setInterval(function () {
-    record("info", ["[heartbeat]", { online: navigator.onLine, visible: !document.hidden }]);
+    var visible = true;
+    try { visible = !document.hidden; } catch (e) { /* old WebKit */ }
+    record("info", ["[heartbeat]", { online: safeOnline(), visible: visible }]);
   }, 15000);
 
   // ── Public surface ───────────────────────────────────────
