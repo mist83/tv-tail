@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-ui-theme="ghoul" data-ui-mode="dark">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -7,82 +7,44 @@
     <title>tv-tail · live console for any browser app</title>
     <meta name="description" content="Hosted dashboard for tv-tail — live console + error stream from every browser app you've wired up. Filter by app, level, search.">
     <link rel="icon" type="image/svg+xml" href="./favicon.svg">
-    <!-- Canonical UI framework — drives palette, typography, scrollbars, button/input chrome. -->
+
+    <!-- Canonical workspace shell + ghoul theme. ui.mullmania.com is the
+         only source of layout / palette / chrome. We do not ship a styles.css. -->
     <link rel="stylesheet" href="https://ui.mullmania.com/ghoul/style.css">
-    <!-- App-specific layout (three-pane dashboard grid + log-feed rows) on top. -->
-    <link rel="stylesheet" href="./styles.css">
-    <!-- We dogfood our own log-tap so the dashboard appears in itself. -->
+    <script src="https://ui.mullmania.com/ui.js" data-ui-theme="ghoul" data-ui-mode="dark"></script>
+
+    <!-- Telemetry: drop-in shim. We dogfood our own log-tap so this dashboard
+         appears in itself when streaming. -->
     <script>window.LOG_TAP_VERSION = "dashboard";</script>
     <script src="./log-tap.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js" defer></script>
     <script type="module" src="./app.js" defer></script>
+
+    <!-- A handful of feed-row tints that aren't part of the theme primitive
+         set — kept tiny so the rest is upstream. -->
+    <style>
+      .feed-row { display: grid; grid-template-columns: 92px 56px 140px 60px 1fr; gap: 12px; padding: 1px 14px; align-items: baseline; white-space: pre-wrap; word-break: break-word; font-size: var(--text-sm); line-height: 1.45; }
+      .feed-row:hover { background: rgba(255,255,255,0.025); }
+      .feed-row .ts { color: var(--text-very-muted); font-size: var(--text-xs); }
+      .feed-row .lvl { font-size: var(--text-xs); letter-spacing: 0.1em; }
+      .feed-row .app { font-weight: var(--weight-bold); }
+      .feed-row .ses { color: var(--text-very-muted); font-size: var(--text-xs); }
+      .feed-row .msg { color: var(--text-primary); }
+      .feed-row.lvl-debug .lvl { color: var(--text-very-muted); }
+      .feed-row.lvl-log   .lvl { color: var(--text-muted); }
+      .feed-row.lvl-info  .lvl { color: var(--color-info); }
+      .feed-row.lvl-warn  .lvl { color: var(--color-warning); }
+      .feed-row.lvl-error .lvl { color: var(--color-danger); }
+      .feed-row.lvl-error .msg { color: #ffb6bd; }
+      .feed-row.lvl-warn  .msg { color: #ffe2b2; }
+      #feed { font-family: var(--font-mono); }
+      #feed-empty pre { user-select: all; }
+    </style>
   </head>
-  <body data-ui-theme="ghoul" data-ui-mode="dark">
-    <header class="topbar">
-      <div class="brand">
-        <span class="brand-mark">tv·</span><span class="brand-rest">tail</span>
-        <span id="conn-dot" class="conn-dot" data-state="connecting" title="connecting…"></span>
-      </div>
-      <div class="topbar-meta">
-        <label class="control">
-          <span class="control-label">CHANNEL</span>
-          <input id="channel-input" type="text" value="tv-logs" spellcheck="false" autocomplete="off">
-        </label>
-        <label class="control">
-          <span class="control-label">HUB</span>
-          <input id="hub-input" type="text" spellcheck="false" autocomplete="off">
-        </label>
-        <button id="reconnect-btn" class="btn">RECONNECT</button>
-      </div>
-    </header>
 
-    <aside class="sidebar" aria-label="Apps">
-      <div class="sidebar-header">
-        <span>APPS</span>
-        <span id="app-count" class="count">0</span>
-      </div>
-      <ul id="app-list" class="app-list" role="listbox" tabindex="0"></ul>
-      <p class="sidebar-hint">Apps appear here as they say <code>hello</code>. Click an app to filter.</p>
-    </aside>
-
-    <section class="filters">
-      <div class="filter-group">
-        <span class="filter-label">LEVEL</span>
-        <label class="lvl"><input type="checkbox" data-level="debug"> debug</label>
-        <label class="lvl"><input type="checkbox" data-level="log" checked> log</label>
-        <label class="lvl"><input type="checkbox" data-level="info" checked> info</label>
-        <label class="lvl"><input type="checkbox" data-level="warn" checked> warn</label>
-        <label class="lvl"><input type="checkbox" data-level="error" checked> error</label>
-      </div>
-      <div class="filter-group">
-        <span class="filter-label">SEARCH</span>
-        <input id="search-input" type="search" placeholder="filter messages (substring)…" spellcheck="false">
-      </div>
-      <div class="filter-group">
-        <button id="pause-btn" class="btn btn-toggle" aria-pressed="false">PAUSE</button>
-        <button id="clear-btn" class="btn">CLEAR</button>
-        <button id="copy-btn" class="btn">COPY</button>
-        <button id="autoscroll-btn" class="btn btn-toggle" aria-pressed="true">AUTO-SCROLL</button>
-      </div>
-      <div class="filter-group right">
-        <span id="stats" class="stats">0 lines · 0 apps</span>
-      </div>
-    </section>
-
-    <main class="feed-wrap">
-      <ol id="feed" class="feed" aria-live="polite"></ol>
-      <div id="empty-state" class="empty-state">
-        <h2>No apps streaming yet.</h2>
-        <p>Drop this into the <code>&lt;head&gt;</code> of any browser app:</p>
-        <pre><code>&lt;script src="https://tv-tail.mullmania.com/log-tap.js"&gt;&lt;/script&gt;</code></pre>
-        <p>Open the app on the device you want to watch — <strong>this page will fill up</strong>.</p>
-        <p class="dim">Channel: <code id="empty-channel">tv-logs</code> · Hub: <code id="empty-hub">signalargh.&lt;base-host&gt;</code></p>
-      </div>
-    </main>
-
-    <footer class="footer">
-      <span>protocol: <code>customMessage</code> with topics <code>hello</code>, <code>log</code>, <code>bye</code> on channel <code id="footer-channel">tv-logs</code></span>
-      <a href="https://github.com/mist83/tv-tail" target="_blank" rel="noreferrer">github</a>
-    </footer>
+  <body class="builder-shell">
+    <div id="header-container" class="header"></div>
+    <div id="tabs-container" class="tabs"></div>
+    <div id="content-container"></div>
   </body>
 </html>
