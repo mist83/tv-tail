@@ -1,0 +1,14 @@
+{
+  "name": "tv-tail",
+  "status": "ok",
+  "kind": "telemetry-dashboard",
+  "version": "0.2.0",
+  "channel": "tv-logs",
+  "hub": "https://signalargh.<base-host>",
+  "topics": ["hello", "log", "bye"],
+  "client_shim": "/log-tap.js",
+  "needs": [
+    "signal-argh hub reachable on signalargh.<base-host>",
+    "@microsoft/signalr (CDN)"
+  ]
+}

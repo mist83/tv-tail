@@ -1,0 +1,15 @@
+{
+  "name": "tv-tail",
+  "title": "tv-tail",
+  "kind": "telemetry-dashboard",
+  "summary": "Drop-in client shim + hosted dashboard for live browser-app telemetry over signal-argh.",
+  "channel": "tv-logs",
+  "topics": [
+    { "name": "hello", "shape": "{appId, sessionId, ua, screen, version, url}" },
+    { "name": "log",   "shape": "{appId, sessionId, batch:[{ts,level,msg,url}], dropped}" },
+    { "name": "bye",   "shape": "{appId, sessionId}" }
+  ],
+  "integration": "<script src=\"https://tv-tail.mullmania.com/log-tap.js\"></script>",
+  "agent_cli": "~/.claude/tools/tv-tail (node + @microsoft/signalr)",
+  "lastBuilt": "2026-04-30"
+}

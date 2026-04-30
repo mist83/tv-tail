@@ -1,0 +1,36 @@
+{
+  "siteId": "tv-tail",
+  "publishDir": "./docs",
+  "isPublic": true,
+  "delete": true,
+  "exclude": [
+    ".git/*",
+    "node_modules/*",
+    "scripts/*",
+    "mullmania.site.json",
+    "README.md",
+    "deploy.sh"
+  ],
+  "cacheControl": {
+    "*.html": "no-store, max-age=0",
+    "*.css": "no-cache, max-age=0, must-revalidate",
+    "*.js": "no-cache, max-age=0, must-revalidate",
+    "*.json": "no-store, max-age=0",
+    "*.png": "public, max-age=31536000, immutable",
+    "*.svg": "public, max-age=31536000, immutable"
+  },
+  "tags": [
+    "telemetry",
+    "logging",
+    "tv",
+    "operator",
+    "signalargh"
+  ],
+  "canon": {
+    "version": "2026.04.30",
+    "source": "https://development-canon.mullmania.com/canon.json",
+    "profile": "frontdoor-v1",
+    "summary": "Live console + error streamer for any browser app. Drop-in client shim, shared signal-argh channel, hosted dashboard with per-app filters.",
+    "syncPrompt": "Look at the new canon and sync yourself with canon."
+  }
+}

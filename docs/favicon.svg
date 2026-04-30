@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#08080d"/>
+  <rect x="10" y="14" width="44" height="30" rx="3" fill="none" stroke="#b3ff2c" stroke-width="2"/>
+  <rect x="10" y="14" width="44" height="6" fill="#b3ff2c"/>
+  <circle cx="14" cy="17" r="1.5" fill="#08080d"/>
+  <circle cx="18" cy="17" r="1.5" fill="#08080d"/>
+  <circle cx="22" cy="17" r="1.5" fill="#08080d"/>
+  <text x="14" y="32" font-family="monospace" font-size="6" fill="#b3ff2c">tv·</text>
+  <text x="14" y="40" font-family="monospace" font-size="6" fill="#45ffae">log</text>
+  <line x1="22" y1="50" x2="42" y2="50" stroke="#ff2c4d" stroke-width="2"/>
+  <circle cx="32" cy="55" r="3" fill="#ff2c4d"/>
+</svg>

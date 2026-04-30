@@ -1,0 +1,36 @@
+{
+  "repo": "mist83/tv-tail",
+  "name": "tv-tail",
+  "title": "tv-tail",
+  "description": "Live console + error stream from any browser app. Drop-in client shim, shared signal-argh channel, hosted dashboard with per-app filters.",
+  "githubUrl": "https://github.com/mist83/tv-tail",
+  "pagesUrl": "https://mist83.github.io/tv-tail/",
+  "mullmaniaUrl": "https://tv-tail.mullmania.com/",
+  "liveUrl": "https://tv-tail.mullmania.com/",
+  "liveLabel": "Open dashboard",
+  "posterPath": "./demo/poster.svg",
+  "posterNote": "Title-card poster showing the dashboard's three-panel layout.",
+  "manifestPath": "./demo/manifest.json",
+  "hasVideo": false,
+  "defaultBranch": "main",
+  "publishDir": "./docs",
+  "deployMode": "canonical-frontdoor",
+  "primaryLanguage": "javascript",
+  "canon": {
+    "version": "2026.04.30",
+    "source": "https://development-canon.mullmania.com/canon.json",
+    "profile": "frontdoor-v1",
+    "summary": "Telemetry dashboard + canonical drop-in shim. Closes the deploy → test → log → fix loop on devices without devtools.",
+    "syncPrompt": "Look at the new canon and sync yourself with canon.",
+    "checklist": [
+      "Site metadata declares canon version + source.",
+      "Dashboard subscribes to a single shared signal-argh channel.",
+      "log-tap.js is published at the same origin and can be loaded as a CDN by any other app.",
+      "Protocol documented (hello / log / bye)."
+    ],
+    "proof": {
+      "manifestPath": "./demo/manifest.json",
+      "posterPath": "./demo/poster.svg"
+    }
+  }
+}
